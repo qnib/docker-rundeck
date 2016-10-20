@@ -5,6 +5,7 @@ ENV RUNDECK_SERVER_HOST=localhost \
     RUNDECK_LOG_LEVEL=info
 
 RUN apk --no-cache add openssl \
+ && apk --no-cache --repository http://mirror.netcologne.de/alpine/edge/community/ add 'docker>1.12' \
  && mkdir -p /opt/rundeck/ \
  && wget -qO /usr/local/bin/go-github https://github.com/qnib/go-github/releases/download/0.2.2/go-github_0.2.2_MuslLinux \
  && chmod +x /usr/local/bin/go-github \
