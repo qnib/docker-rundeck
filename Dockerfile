@@ -1,5 +1,8 @@
 FROM qnib/alplain-jre8
 
+ENV RUNDECK_SERVER_HOST=localhost \
+    RUNDECK_SERVER_PORT=4440
+
 RUN apk --no-cache add openssl \
  && mkdir -p /opt/rundeck/ \
  && wget -qO /usr/local/bin/go-github https://github.com/qnib/go-github/releases/download/0.2.2/go-github_0.2.2_MuslLinux \
@@ -10,14 +13,10 @@ RUN apk --no-cache add openssl \
  && echo "# rundeck: $(/usr/local/bin/go-github rLatestUrl --ghorg qnib --ghrepo rundeck --regex 'rundeck\-launcher\-[0-9\.]+\-SNAPSHOT\.jar$' |head -n1)" \
  && wget -qO /opt/rundeck/rundeck-launcher.jar $(/usr/local/bin/go-github rLatestUrl --ghorg qnib --ghrepo rundeck --regex "rundeck\-launcher\-[0-9\.]+\-SNAPSHOT\.jar$" |head -n1) \
  && rm -f /usr/local/bin/go-github
-#ADD opt/rundeck/etc/admin.aclpolicy \
-#    opt/rundeck/etc/apitoken.aclpolicy \
-#    opt/rundeck/etc/cli-log4j.properties \
-#    opt/rundeck/etc/framework.properties \
-#    opt/rundeck/etc/preferences.properties \
-#    opt/rundeck/etc/profile \
-#    opt/rundeck/etc/profile.bat \
-#    opt/rundeck/etc/project.properties \
-#    /opt/rundeck/etc/
 ADD opt/rundeck/server/config/rundeck-config.properties /opt/rundeck/server/config/
-ADD opt/qnib/rundeck/bin/start.sh /opt/qnib/rundeck/bin/
+ADD opt/qnib/rundeck/bin/start.sh \
+    opt/qnib/rundeck/bin/healthcheck.sh \
+    /opt/qnib/rundeck/bin/
+ADD etc/confd/conf.d/rundeck.toml /etc/confd/conf.d/
+ADD etc/conf.d/templates/rundeck-config.properties.tmpl /etc/conf.d/templates/
+CMD ["/opt/qnib/rundeck/bin/start.sh"]

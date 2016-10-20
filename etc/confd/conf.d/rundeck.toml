@@ -1,0 +1,7 @@
+[template]
+src = "rundeck-config.properties.tmpl"
+dest = "/opt/rundeck/server/config/rundeck-config.properties"
+owner = "root"
+mode = "0644"
+#check_cmd = "/usr/sbin/nginx -t -c {{.src}}"
+#reload_cmd = "/usr/sbin/service nginx reload"
