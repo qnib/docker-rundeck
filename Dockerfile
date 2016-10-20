@@ -13,10 +13,11 @@ RUN apk --no-cache add openssl \
  && echo "# rundeck: $(/usr/local/bin/go-github rLatestUrl --ghorg qnib --ghrepo rundeck --regex 'rundeck\-launcher\-[0-9\.]+\-SNAPSHOT\.jar$' |head -n1)" \
  && wget -qO /opt/rundeck/rundeck-launcher.jar $(/usr/local/bin/go-github rLatestUrl --ghorg qnib --ghrepo rundeck --regex "rundeck\-launcher\-[0-9\.]+\-SNAPSHOT\.jar$" |head -n1) \
  && rm -f /usr/local/bin/go-github
-ADD opt/rundeck/server/config/rundeck-config.properties /opt/rundeck/server/config/
 ADD opt/qnib/rundeck/bin/start.sh \
     opt/qnib/rundeck/bin/healthcheck.sh \
     /opt/qnib/rundeck/bin/
 ADD etc/confd/conf.d/rundeck.toml /etc/confd/conf.d/
-ADD etc/conf.d/templates/rundeck-config.properties.tmpl /etc/conf.d/templates/
+ADD etc/confd/templates/rundeck-config.properties.tmpl /etc/confd/templates/
+#ADD opt/rundeck/server/config/rundeck-config.properties /opt/rundeck/server/config/
+ADD opt/qnib/entry/rundeck/config.sh /opt/qnib/entry/rundeck/
 CMD ["/opt/qnib/rundeck/bin/start.sh"]

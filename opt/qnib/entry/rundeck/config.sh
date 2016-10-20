@@ -1,3 +1,4 @@
 #!/bin/bash
 
-confd -onetime -backend=env 
+mkdir -p /opt/rundeck/server/config
+confd -onetime -backend=env
