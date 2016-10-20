@@ -1,0 +1,5 @@
+[template]
+src = "realm.properties.tmpl"
+dest = "/opt/rundeck/server/config/realm.properties"
+owner = "root"
+mode = "0644"

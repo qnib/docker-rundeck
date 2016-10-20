@@ -1,7 +1,8 @@
 FROM qnib/alplain-jre8
 
 ENV RUNDECK_SERVER_HOST=localhost \
-    RUNDECK_SERVER_PORT=4440
+    RUNDECK_SERVER_PORT=4440 \
+    RUNDECK_LOG_LEVEL=info
 
 RUN apk --no-cache add openssl \
  && mkdir -p /opt/rundeck/ \
@@ -16,8 +17,15 @@ RUN apk --no-cache add openssl \
 ADD opt/qnib/rundeck/bin/start.sh \
     opt/qnib/rundeck/bin/healthcheck.sh \
     /opt/qnib/rundeck/bin/
-ADD etc/confd/conf.d/rundeck.toml /etc/confd/conf.d/
-ADD etc/confd/templates/rundeck-config.properties.tmpl /etc/confd/templates/
-#ADD opt/rundeck/server/config/rundeck-config.properties /opt/rundeck/server/config/
-ADD opt/qnib/entry/rundeck/config.sh /opt/qnib/entry/rundeck/
+ADD etc/confd/conf.d/jaas-loginmodule.toml \
+    etc/confd/conf.d/realm.toml \
+    etc/confd/conf.d/rundeck-config.toml \
+    /etc/confd/conf.d/
+ADD etc/confd/templates/rundeck-config.properties.tmpl \
+    etc/confd/templates/jaas-loginmodule.conf.tmpl \
+    etc/confd/templates/realm.properties.tmpl \
+    /etc/confd/templates/
+ADD opt/qnib/entry/10-rundeck/config.sh /opt/qnib/entry/10-rundeck/
 CMD ["/opt/qnib/rundeck/bin/start.sh"]
+#RUN chown user: /opt/rundeck/rundeck-launcher.jar \
+#&& for d in server/exp server/lib tools;do mkdir -p /opt/rundeck/${d} ; chown -R user: /opt/rundeck/${d} ;done

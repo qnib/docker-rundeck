@@ -1,0 +1,5 @@
+[template]
+src = "jaas-loginmodule.conf.tmpl"
+dest = "/opt/rundeck/server/config/jaas-loginmodule.conf"
+owner = "root"
+mode = "0644"
